@@ -1,4 +1,5 @@
 import time
+from TextAlert import sendText
 
 
 class Alert:
@@ -21,10 +22,13 @@ class Alert:
 
         if priority == 'high':
             print(ip + ' is down - Invalid Access (high warning)\n\n')
+            sendText('+13213551122', ip + " was reached when it shouldnt have been - Invalid Access (high warning)")
             self.timeStart = time.time()
         elif priority == 'low':
-            print(ip + ' is down - Invalid Access (high warning)\n\n')
+            print(ip + ' is down - Invalid Access (low warning)\n\n')
+            sendText('+13213551122', ip + " wasn't able to be reached when it shouldn't have been - Invalid Access (low warning)")
             self.timeStart = time.time()
         else:
             print(ip + ' is working\n\n')
+            sendText('+13213551122', ip + " is working")
             self.timeStart = time.time()
