@@ -1,17 +1,38 @@
 import csv
 import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
+import datetime
 from alert import *
-
+from wificheck import check_network
+from TextAlert import sendText
 
 # Constants
-CSV_FILENAME = 'endpointsIP.csv'
+#CSV_FILENAME = 'endpointsIP1.csv'
 MAX_TIME = 100 # ms
 DELAY = 0 # sec
 
 def main():
-    pinger = Pinger(filename=CSV_FILENAME, pingMaxTime=MAX_TIME, messageDelay=DELAY)
-    pinger.run_checker()
+    start_time = time.time()
+    #elapsed_time = time.time() - start_time
+    #print(elapsed_time)
+    
+    CSV_FILENAME = check_network() + '.csv'
+    #pinger = Pinger(filename=CSV_FILENAME, pingMaxTime=MAX_TIME, messageDelay=DELAY)
+    
+    #Run until the program is told otherwise
+    try:
+        while True:
+            #Send out heartbeat alert every 15 minutes
+            elapsed_time = time.time() - start_time
+            if (880 < elapsed_time < 920):
+               sendText('+18134465250', "Device is still alive") 
+
+            #Process the csv file and perform pings every 10 seconds unless a keyboard interrupt occurs
+            pinger = Pinger(filename=CSV_FILENAME, pingMaxTime=MAX_TIME, messageDelay=DELAY)
+            pinger.run_checker()
+            time.sleep(10)
+    except KeyboardInterrupt:
+        print('interrupted!')
 
 
 class Pinger:
@@ -31,7 +52,7 @@ class Pinger:
             Load endpoints list from csv file
             Returns endpoint list: {'ip': (str), 'accessible': (bool)}
         '''
-        csvfile = open(filename, 'r')
+        csvfile = open('/home/pi/Desktop/SeniorProject/MVP/Upload/' + filename, 'r')
         endpoints = [{'ip': ep[0], 'accessible': ep[1]=='TRUE'} for ep in csv.reader(csvfile)]
         csvfile.close()
         endpoints.pop(0)
@@ -44,12 +65,14 @@ class Pinger:
             Time (int) is the max time to wait for the ping in miliseconds.
         '''
         # Option for the number of packets as a function of
-        param = '-n' if platform.system().lower()=='windows' else '-c'
+        #param = '-n' if platform.system().lower()=='windows' else '-c'
 
         # Building and calls the ping command
-        response = subprocess.call(['ping', param, '1', '-W', str(self.pingMaxTime), ip])
+        #response = subprocess.call(['ping', param, '3', '-w', str(self.pingMaxTime), ip])
+        response = subprocess.call(['ping', '-c', '3', ip])
 
-        # Return respond
+
+        # Return response
         return response == 0
         
     def check_endpoint(self, endpoint):
@@ -57,13 +80,20 @@ class Pinger:
             Checks if the endpoint is working, otherwise sends alert
         '''
         pingResp = self.ping(endpoint['ip'])
+        
         if pingResp and (not endpoint['accessible']):
-            self.alert.send(priority='high', ip=endpoint['ip'])
-            return False
+            pingtest = self.ping(endpoint['ip'])
+            if pingtest and (not endpoint['accessible']):
+                self.alert.send(priority='high', ip=endpoint['ip'])
+                return False
+            return True 
 
         elif (not pingResp) and endpoint['accessible']:
-            self.alert.send(priority='low', ip=endpoint['ip'])
-            return False
+            pingtest = self.ping(endpoint['ip'])
+            if (not pingtest) and (endpoint['accessible']):
+                self.alert.send(priority='high', ip=endpoint['ip'])
+                return False
+            return True
 
         else:
             self.alert.send(priority='working', ip=endpoint['ip'])
