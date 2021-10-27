@@ -9,12 +9,12 @@ CREATE TABLE endpoints (
     network_id INTEGER NOT NULL,
     FOREIGN KEY (network_id)
         REFERENCES networks (network_id)
-)
+);
 
 CREATE TABLE networks (
     network_id INTEGER PRIMARY KEY AUTOINCREMENT,
     SSID TEXT NOT NULL
-)
+);
 
 CREATE TABLE alerts (
     alert_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,4 +24,4 @@ CREATE TABLE alerts (
     failure_type TEXT NOT NULL,
     FOREIGN KEY (endpoint_id)
         REFERENCES endpoints (endpoint_id)
-)
+);
