@@ -6,7 +6,7 @@ from flaskr.db import get_db
 from werkzeug.utils import secure_filename
 from . import wificheck
 
-UPLOAD_FOLDER = '/home/pi/Desktop/SeniorProject/MVP/Upload'
+UPLOAD_FOLDER = '/Users/caseypersonal/Documents'
 ALLOWED_EXTENSIONS = {'csv'}
 
 bp = Blueprint('endpoints', __name__, url_prefix = '/endpoints')
@@ -20,18 +20,20 @@ def upload():
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('no file part')
-            return redirect(request.url)
+            
         file = request.files['file']
         if file.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            temp_file = wificheck.check_network()
-            file.save(os.path.join(UPLOAD_FOLDER, temp_file + '.csv'))
+            # temp_file = wificheck.check_network()
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
             flash('Thank you')
-            return redirect(request.url)
-            #return redirect(url_for('upload_file', name=filename))
+            
+            return redirect(url_for('home'))
             #return 'Thank you'
+        else:
+            flash('Invalid file extension.')
 
-    return render_template('home.html')
+    return redirect(url_for('home'))
