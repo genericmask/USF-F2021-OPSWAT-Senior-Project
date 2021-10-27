@@ -35,12 +35,3 @@ def upload():
             #return 'Thank you'
 
     return render_template('home.html')
-    # return '''
-    # <!doctype html>
-    # <title> Upload Network csv File</title>
-    # <h1> Upload Network csv File</h1>
-    # <form method = post enctype=multipart/form-data>
-    #     <input type = file name = file>
-    #     <input type = submit value = Upload>
-    # </form>
-    # '''
