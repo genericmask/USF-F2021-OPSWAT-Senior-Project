@@ -3,7 +3,7 @@ This was made following (some of) the Flask tutorial: https://flask.palletsproje
 Setup steps from https://flask.palletsprojects.com/en/2.0.x/installation/
 and https://flask.palletsprojects.com/en/2.0.x/quickstart/
 
-Setup steps macOS/Linux:
+Initial setup steps macOS/Linux:
 1. Open a terminal in the server folder.
 2. Create a venv folder with "python3 -m venv venv"
 3. Activate the environment with ". venv/bin/activate". Your shell prompt wil change to
@@ -14,7 +14,7 @@ Setup steps macOS/Linux:
     $ export FLASK_ENV=development
     $ flask run
 
-Setup steps Windows:
+Initial setup steps Windows:
 1. Open a cmd prompt in the server folder.
 2. Create a venv folder with "py -3 -m venv venv"
 3. Active the environment with "venv\Scripts\activate". Your shell prompt wil change to
@@ -23,3 +23,8 @@ Setup steps Windows:
 5. To start flask, open Powershell and run:
     > $env:FLASK_ENV = "development"
     > flask run
+
+To initialize the db:
+1. Follow steps 1, 3, & 5 for your system.
+2. Run: "flask init-db"
+   You should see "Initialized the database."
