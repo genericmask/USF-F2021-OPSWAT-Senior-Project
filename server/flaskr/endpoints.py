@@ -1,4 +1,5 @@
 import os
+import csv
 from flask import (
     Blueprint, g, redirect, request, render_template, session, url_for, flash
 )
@@ -15,18 +16,40 @@ def allowed_file(filename):
         return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def insert_endpoints(csv_file):
+def get_SSID():
+    return "FiOS-ZL17E-5G"
+
+def get_network_id():
     db = get_db()
-    # delete any endpoints that have the current network id
-    
-    # read the csv to get the endpoints
-    # insert the endpoints
+    ssid = get_SSID()
+    row = db.execute(
+        "SELECT network_id FROM networks WHERE SSID LIKE ?", (ssid,)
+    ).fetchone() # For some reason this gets a Sqlite3.Row object or something and its properties are the column names...
+    id = row["network_id"]
+    return id
+
+def insert_endpoints(csv):
+    network_id = int(get_network_id())
+
+    db = get_db()
+    db.execute(
+        "DELETE FROM endpoints WHERE network_id = ?", (network_id,)
+    )
+    db.commit()
+
+    csv_arr = [x.split(",") for x in csv.split("\r\n")]
+    csv_arr.pop(0)
+    print(csv_arr)
     try:
-        db.execute()
-        db.commit()
+        for ep, a in csv_arr:
+            print(ep,a)
+            db.execute(
+                "INSERT INTO endpoints (endpoint, accessible, network_id) VALUES (?, ?, ?)", (ep, a, network_id,)
+            )
+            
     except:
         return False
-        
+    db.commit()
     return True
 
 @bp.route('/upload', methods = ('GET', 'POST'))
@@ -45,7 +68,7 @@ def upload():
                 error = 'Invalid file extension.'
             
             if error is None:
-                insert_endpoints(file)
+                insert_endpoints(file.read().decode("utf-8"))
                 filename = secure_filename(file.filename)
                 # temp_file = wificheck.check_network()
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
