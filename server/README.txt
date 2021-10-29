@@ -9,7 +9,8 @@ Initial setup steps macOS/Linux:
 3. Activate the environment with ". venv/bin/activate". Your shell prompt wil change to
     show the name of the activated environment.
 4. Install flask with "pip install Flask"
-5. To start flask, run: 
+5. Install flask with "pip install twilio"
+6. To start flask, run: 
     $ export FLASK_APP=flaskr
     $ export FLASK_ENV=development
     $ flask run --host=0.0.0.0
@@ -20,7 +21,8 @@ Initial setup steps Windows:
 3. Active the environment with "venv\Scripts\activate". Your shell prompt wil change to
     show the name of the activated environment.
 4. Install flask with "pip install Flask"
-5. To start flask, open Powershell and run:
+5. Install flask with "pip install twilio"
+6. To start flask, open Powershell and run:
     > $env:FLASK_ENV = "development"
     > flask run --host=0.0.0.0
 
