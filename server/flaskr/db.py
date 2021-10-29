@@ -1,5 +1,6 @@
 import sqlite3
 from typing import Any
+from wificheck import check_network
 
 import click
 from flask import current_app, g
@@ -44,7 +45,7 @@ def init_app(app):
 # utility functions
 
 def get_SSID():
-    return "FiOS-ZL17E-5G"
+    return check_network
 
 def insert_SSID(ssid):
     db = get_db()

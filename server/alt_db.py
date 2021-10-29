@@ -1,5 +1,6 @@
 import sqlite3
 from contextlib import closing
+from wificheck import check_network
 
 def get_db_connection():
     
@@ -14,7 +15,7 @@ def get_db_connection():
 # utility functions
 
 def get_SSID():
-    return "FiOS-ZL17E-5G"
+    return check_network()
 
 def insert_SSID(ssid):
     with closing(get_db_connection()) as connection:

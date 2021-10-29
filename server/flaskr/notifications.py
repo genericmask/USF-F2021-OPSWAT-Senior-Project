@@ -1,11 +1,7 @@
-import os
-import csv
 from flask import (
     Blueprint, g, redirect, request, render_template, session, url_for, flash
 )
-from flaskr.db import get_db, insert_notification_settings
-from werkzeug.utils import secure_filename
-from . import wificheck
+from flaskr.db import insert_notification_settings
 
 bp = Blueprint('notifications', __name__, url_prefix = '/notifications')
 

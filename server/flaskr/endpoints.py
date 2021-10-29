@@ -5,7 +5,6 @@ from flask import (
 )
 from flaskr.db import get_db, insert_endpoints
 from werkzeug.utils import secure_filename
-from . import wificheck
 
 UPLOAD_FOLDER = '/Users/caseypersonal/Documents'
 ALLOWED_EXTENSIONS = {'csv'}
@@ -34,7 +33,6 @@ def upload():
             if error is None:
                 insert_endpoints(file.read().decode("utf-8"))
                 filename = secure_filename(file.filename)
-                # temp_file = wificheck.check_network()
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 flash('Thank you')
                 
