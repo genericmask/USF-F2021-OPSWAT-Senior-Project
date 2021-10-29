@@ -25,8 +25,16 @@ Initial setup steps Windows:
     > flask run --host=0.0.0.0
 
 To initialize the db:
-1. Follow steps 1 and 3 for your system.
-2. Run: "flask init-db"
+1. Follow steps 1 and 3 of initial setup for your system.
+2. Set the environment variables:
+    macOS: 
+    $ export FLASK_APP=flaskr
+    $ export FLASK_ENV=development
+
+    Powershell:
+    > $env:FLASK_ENV = "development"
+
+3. Run: "flask init-db"
    You should see "Initialized the database."
 
 To run the server after initial setup:
