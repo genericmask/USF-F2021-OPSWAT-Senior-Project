@@ -1,12 +1,8 @@
-import os
-import csv
 from flask import (
     Blueprint, g, redirect, request, render_template, session, url_for, flash
 )
-from flaskr.db import get_db, insert_endpoints
-from werkzeug.utils import secure_filename
+from flaskr.db import insert_endpoints
 
-UPLOAD_FOLDER = '/Users/caseypersonal/Documents'
 ALLOWED_EXTENSIONS = {'csv'}
 
 bp = Blueprint('endpoints', __name__, url_prefix = '/endpoints')
@@ -32,8 +28,6 @@ def upload():
             
             if error is None:
                 insert_endpoints(file.read().decode("utf-8"))
-                filename = secure_filename(file.filename)
-                #file.save(os.path.join(UPLOAD_FOLDER, filename))
                 flash('Thank you')
                 
                 return redirect(url_for('home'))
