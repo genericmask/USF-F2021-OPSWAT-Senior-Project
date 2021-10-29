@@ -45,7 +45,7 @@ def init_app(app):
 # utility functions
 
 def get_SSID():
-    return check_network
+    return check_network()
 
 def insert_SSID(ssid):
     db = get_db()
