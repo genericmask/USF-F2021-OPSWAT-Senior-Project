@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS endpoints;
 DROP TABLE IF EXISTS networks;
 DROP TABLE IF EXISTS alerts;
+DROP TABLE IF EXISTS notification_settings;
 
 CREATE TABLE endpoints (
     endpoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,3 +26,13 @@ CREATE TABLE alerts (
     FOREIGN KEY (endpoint_id)
         REFERENCES endpoints (endpoint_id)
 );
+
+CREATE TABLE notification_settings (
+    notification_settings_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    network_id INTEGER NOT NULL,
+    phone_number TEXT,
+    alert_interval NUMBER DEFAULT 10,
+    webhook_url TEXT,
+    FOREIGN KEY (network_id)
+        REFERENCES networks (network_id)
+)

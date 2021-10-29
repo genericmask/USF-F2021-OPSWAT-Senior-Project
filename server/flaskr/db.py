@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Any
 
 import click
 from flask import current_app, g
@@ -38,3 +39,83 @@ def close_db(e=None):
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
+
+# utility functions
+
+def get_SSID():
+    return "FiOS-ZL17E-5G"
+
+def insert_SSID(ssid):
+    db = get_db()
+    db.execute(
+        "INSERT INTO networks (SSID) VALUES (?)", (ssid,)
+    )
+    db.commit()
+
+
+def get_network_id():
+    db = get_db()
+    ssid = get_SSID()
+    row = db.execute(
+        "SELECT network_id FROM networks WHERE SSID LIKE ?", (ssid,)
+    ).fetchone() # For some reason this gets a Sqlite3.Row object or something and its properties are the column names...
+    try:
+        id = row["network_id"]
+    except TypeError:
+        insert_SSID(ssid)
+        return get_network_id()
+    return int(id)
+
+
+# endpoints
+
+def insert_endpoints(csv):
+    network_id = get_network_id()
+
+    db = get_db()
+    db.execute(
+        "DELETE FROM endpoints WHERE network_id = ?", (network_id,)
+    )
+    db.commit()
+
+    csv_arr = [x.split(",") for x in csv.split("\r\n")]
+    csv_arr.pop(0)
+    print(csv_arr)
+    try:
+        for ep, a in csv_arr:
+            print(ep,a)
+            db.execute(
+                "INSERT INTO endpoints (endpoint, accessible, network_id) VALUES (?, ?, ?)", (ep, a, network_id,)
+            )
+            db.commit()
+    except:
+        return False
+    
+    return True
+
+
+# notifications
+
+# @param=settings : a dictionary containing the phone_number, sms_alert_interval, webhook_url, and webhook_alert_interval,
+def insert_notification_settings(settings):
+    print("Inserting settings into DB: ", settings)
+
+    network_id = get_network_id()
+
+    db = get_db()
+    db.execute(
+        "DELETE FROM endpoints WHERE network_id = ?", (network_id,)
+    )
+    db.commit()
+
+    try:
+        db.execute(
+            "INSERT INTO notification_settings (network_id, phone_number, alert_interval, webhook_url) VALUES (?, ?, ?, ?)", (network_id, settings["phone_number"], settings["alert_interval"], settings["webhook_url"],)
+        )
+        db.commit()
+    except BaseException as err:
+        print(f"Unexpected {err=}, {type(err)=}")
+        return False
+    
+    return True
