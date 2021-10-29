@@ -3,6 +3,7 @@ import platform    # For getting the operating system name
 import os, subprocess  # For executing a shell command
 import datetime
 from alert import *
+from alt_db import get_endpoints
 #from wificheck import check_network
 #from TextAlert import sendText
 
@@ -48,12 +49,13 @@ def main():
 class Pinger:
 
     def __init__(self, filename, pingMaxTime=100, messageDelay=10):
-        if filename ==  None:
-            self.endpoints = None
-            self.pingMaxTime = pingMaxTime
-            return
+        # if filename ==  None:
+        #     self.endpoints = None
+        #     self.pingMaxTime = pingMaxTime
+        #     return
         
-        self.endpoints = self.read_data(filename)
+        # self.endpoints = self.read_data(filename)
+        self.endpoints = get_endpoints()
         self.pingMaxTime = pingMaxTime
         self.alert = Alert(delay=messageDelay)
 

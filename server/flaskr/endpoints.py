@@ -33,7 +33,7 @@ def upload():
             if error is None:
                 insert_endpoints(file.read().decode("utf-8"))
                 filename = secure_filename(file.filename)
-                file.save(os.path.join(UPLOAD_FOLDER, filename))
+                #file.save(os.path.join(UPLOAD_FOLDER, filename))
                 flash('Thank you')
                 
                 return redirect(url_for('home'))
