@@ -33,7 +33,7 @@ CREATE TABLE notification_settings (
     phone_number TEXT,
     sms_alert_interval NUMBER DEFAULT 10,
     webhook_url TEXT,
-    heart_beat_alert_interval NUMBER DEFAULT 120
+    heart_beat_alert_interval NUMBER DEFAULT 120,
     FOREIGN KEY (network_id)
         REFERENCES networks (network_id)
 )
