@@ -121,3 +121,16 @@ def insert_notification_settings(settings):
         return False
     
     return True
+
+# @return : a dictionary containing the phone_number, alert_interval, webhook_url
+def get_notification_settings():
+    network_id = get_network_id()
+    db = get_db()
+
+    d = {"phone_number": '', "alert_interval": '', "webhook_url": ''}
+    
+    row = db.execute(
+        "SELECT phone_number, alert_interval, webhook_url FROM notification_settings WHERE network_id = ?", (network_id,)
+    ).fetchone()
+    return True
+    #for prop in row:
