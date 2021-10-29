@@ -5,9 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    <h1> Upload Network csv File</h1>
+    <h1>Upload Access List .CSV File</h1>
     <form action="endpoints/upload" method=post enctype=multipart/form-data>
         <input type = file name = file>
         <input type = submit value = Upload>
     </form>
+    <div id="configureNotifications">
+      <h1>Configure Notifications</h1>
+      <form action="notifications/configure" method=post enctype=multipart/form-data>
+
+        <label for="phoneNumberInput">SMS Phone Number</label>
+        <input id="phoneNumberInput" type="tel" name="phone_number">
+
+        <label for="alertIntervalInput">SMS Alert Interval (minutes)</label>
+        <input id="alertIntervalInput" type="number" name="alert_interval" value="10">
+
+        <label for="webhookURLInput">Webhook URL</label>
+        <input id="webhookURLInput" type="text" name="webhook_url">
+
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+    
 {% endblock %}

@@ -34,8 +34,9 @@ def create_app(test_config=None):
     def home():
         return render_template('home.html')
 
-    from . import endpoints
+    from . import endpoints, notifications
     app.register_blueprint(endpoints.bp)
+    app.register_blueprint(notifications.bp)
 
     return app
 
