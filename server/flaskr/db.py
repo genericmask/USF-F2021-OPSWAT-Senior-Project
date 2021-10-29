@@ -114,7 +114,7 @@ def get_endpoints():
 
 # notifications
 
-# @param=settings : a dictionary containing the phone_number, alert_interval, webhook_url
+# @param=settings : a dictionary containing the phone_number, sms_alert_interval, webhook_url
 def insert_notification_settings(settings):
     print("Inserting settings into DB: ", settings)
 
@@ -128,7 +128,7 @@ def insert_notification_settings(settings):
 
     try:
         db.execute(
-            "INSERT INTO notification_settings (network_id, phone_number, alert_interval, webhook_url) VALUES (?, ?, ?, ?)", (network_id, settings["phone_number"], settings["alert_interval"], settings["webhook_url"],)
+            "INSERT INTO notification_settings (network_id, phone_number, sms_alert_interval, webhook_url, heart_beat_alert_interval) VALUES (?, ?, ?, ?)", (network_id, settings["phone_number"], settings["sms_alert_interval"], settings["webhook_url"], settings["heart_beat_alert_interval"],)
         )
         db.commit()
     except BaseException as err:
@@ -137,12 +137,12 @@ def insert_notification_settings(settings):
     
     return True
 
-# @return : a dictionary containing the phone_number, alert_interval, webhook_url
+# @return : a dictionary containing the phone_number, sms_alert_interval, webhook_url, heart_beat_alert_interval
 def get_notification_settings():
     network_id = get_network_id()
     db = get_db()
 
-    d = {"phone_number": '', "alert_interval": '', "webhook_url": ''}
+    d = {"phone_number": '', "sms_alert_interval": '', "webhook_url": '', "heart_beat_alert_interval": ''}
     
     row = db.execute(
         "SELECT * FROM notification_settings WHERE network_id = ?", (network_id,)
