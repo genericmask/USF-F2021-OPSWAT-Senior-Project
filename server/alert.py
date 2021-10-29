@@ -4,7 +4,7 @@ import datetime
 
 from TextAlert import sendText
 
-from altdb import get_notification_settings
+from alt_db import get_notification_settings
 
 
 class Alert:
