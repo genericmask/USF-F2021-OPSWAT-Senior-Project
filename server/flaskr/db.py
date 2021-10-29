@@ -91,7 +91,7 @@ def insert_endpoints(csv):
             )
             db.commit()
     except BaseException as err:
-        print(f"Unexpected {err=}, {type(err)=}")
+        #print(f"Unexpected {err=}, {type(err)=}")
         return False
     
     return True
@@ -117,7 +117,7 @@ def insert_notification_settings(settings):
         )
         db.commit()
     except BaseException as err:
-        print(f"Unexpected {err=}, {type(err)=}")
+        #print(f"Unexpected {err=}, {type(err)=}")
         return False
     
     return True
@@ -130,7 +130,11 @@ def get_notification_settings():
     d = {"phone_number": '', "alert_interval": '', "webhook_url": ''}
     
     row = db.execute(
-        "SELECT phone_number, alert_interval, webhook_url FROM notification_settings WHERE network_id = ?", (network_id,)
+        "SELECT * FROM notification_settings WHERE network_id = ?", (network_id,)
     ).fetchone()
-    return True
-    #for prop in row:
+
+    # TODO: This will throw a key error if the row doesn't contain anything
+    for key in d:
+        d[key] = row[key]
+
+    return d
