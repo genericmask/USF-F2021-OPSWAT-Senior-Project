@@ -4,8 +4,8 @@ import os, subprocess  # For executing a shell command
 import datetime
 from alert import *
 from wificheck import check_network
-from altdb import get_notification_settings
-from altdb import get_endpoints
+from alt_db import get_notification_settings
+from alt_db import get_endpoints
 from TextAlert import sendText
 
 # Constants
