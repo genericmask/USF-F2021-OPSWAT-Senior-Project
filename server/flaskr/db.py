@@ -121,7 +121,7 @@ def insert_notification_settings(settings):
 
     db = get_db()
     db.execute(
-        "DELETE FROM endpoints WHERE network_id = ?", (network_id,)
+        "DELETE FROM notification_settings WHERE network_id = ?", (network_id,)
     )
     db.commit()
 
