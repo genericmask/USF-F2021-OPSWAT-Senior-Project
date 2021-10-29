@@ -149,7 +149,7 @@ def get_notification_settings():
     ).fetchone()
 
     # TODO: This will throw a key error if the row doesn't contain anything
-    if len(row.keys()) > 1:
+    if row != None:
         for key in d:
             d[key] = row[key]
 
