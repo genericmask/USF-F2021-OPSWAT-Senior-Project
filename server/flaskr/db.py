@@ -82,10 +82,10 @@ def insert_endpoints(csv):
 
     csv_arr = [x.split(",") for x in csv.split("\r\n")]
     csv_arr.pop(0)
-    print(csv_arr)
+    #print(csv_arr)
     try:
         for ep, a in csv_arr:
-            print(ep,a)
+            #print(ep,a)
             db.execute(
                 "INSERT INTO endpoints (endpoint, accessible, network_id) VALUES (?, ?, ?)", (ep, a, network_id,)
             )
@@ -96,6 +96,20 @@ def insert_endpoints(csv):
     
     return True
 
+# @return : an array containing an object with ip (str) and accessible (bool) properties
+def get_endpoints():
+    network_id = get_network_id()
+    db = get_db()
+
+    rows = db.execute(
+        "SELECT endpoint, accessible FROM endpoints WHERE network_id = ?", (network_id,)
+    ).fetchall() # TODO: Not sure if fetchall will work with more than one network_id
+
+    endpoints = [{'ip': ep[0], 'accessible': ep[1]=='TRUE'} for ep in rows]
+    
+    #print("endpoints: ", endpoints)
+
+    return endpoints
 
 # notifications
 
@@ -138,3 +152,8 @@ def get_notification_settings():
         d[key] = row[key]
 
     return d
+
+
+    
+
+    
