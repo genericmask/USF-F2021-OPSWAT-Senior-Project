@@ -54,7 +54,7 @@ def get_endpoints():
 
     endpoints = [{'ip': ep[0], 'accessible': ep[1]=='TRUE'} for ep in rows]
 
-    print("endpoints: ", endpoints)
+    #print("endpoints: ", endpoints)
 
     return endpoints
 
