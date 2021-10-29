@@ -62,7 +62,7 @@ def get_network_id():
     ).fetchone() # For some reason this gets a Sqlite3.Row object or something and its properties are the column names...
     try:
         id = row["network_id"]
-    except TypeError:
+    except TypeError: # The network id wasn't found so lets insert it
         insert_SSID(ssid)
         return get_network_id()
     return int(id)
@@ -70,6 +70,7 @@ def get_network_id():
 
 # endpoints
 
+# @param=csv : a string containing the contents of a csv file where the first line is the column names and rows are ended with '\r\n'
 def insert_endpoints(csv):
     network_id = get_network_id()
 
@@ -89,7 +90,8 @@ def insert_endpoints(csv):
                 "INSERT INTO endpoints (endpoint, accessible, network_id) VALUES (?, ?, ?)", (ep, a, network_id,)
             )
             db.commit()
-    except:
+    except BaseException as err:
+        print(f"Unexpected {err=}, {type(err)=}")
         return False
     
     return True
