@@ -3,13 +3,12 @@ import os, subprocess  # For executing a shell command
 import datetime
 from alert import *
 from wificheck import check_network
-from alt_db import get_notification_settings
-from alt_db import get_endpoints
+from alt_db import get_notification_settings, get_endpoints
 from TextAlert import sendText
 
 # Constants
 MAX_TIME = 100 # ms
-HEARTBEAT_DELAY = 900
+#HEARTBEAT_DELAY = 900
 DELAY = 5 # sec
 
 def main():
@@ -25,7 +24,7 @@ def main():
         while True:
             #Send out heartbeat alert every 15 minutes
             elapsed_time = time.time() - start_time
-            if (HEARTBEAT_DELAY < elapsed_time):
+            if ((get_notification_settings()['heart_beat_alert_interval'] * 60) < elapsed_time):
                sendText(get_notification_settings()['phone_number'], "Device is still alive") 
                print("$$$$ Device is still alive $$$$", end = "\n\n")
                start_time = time.time() # reset time
@@ -74,18 +73,18 @@ class Pinger:
         pingResp = self.ping(endpoint['ip'])
         
         if pingResp and (not endpoint['accessible']):
-            pingtest = self.ping(endpoint['ip'])
-            if pingtest and (not endpoint['accessible']):
+            #pingtest = self.ping(endpoint['ip'])
+            #if pingtest and (not endpoint['accessible']):
                 self.alert.send(priority='high', ip=endpoint['ip'])
                 return False
-            return True 
+            #return True 
 
         elif (not pingResp) and endpoint['accessible']:
-            pingtest = self.ping(endpoint['ip'])
-            if (not pingtest) and (endpoint['accessible']):
+            #pingtest = self.ping(endpoint['ip'])
+            #if (not pingtest) and (endpoint['accessible']):
                 self.alert.send(priority='low', ip=endpoint['ip'])
                 return False
-            return True
+            #return True
 
         else:
             self.alert.send(priority='working', ip=endpoint['ip'])
