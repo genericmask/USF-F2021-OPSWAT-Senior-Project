@@ -12,7 +12,7 @@ Initial setup steps macOS/Linux:
 5. To start flask, run: 
     $ export FLASK_APP=flaskr
     $ export FLASK_ENV=development
-    $ flask run
+    $ flask run --host=0.0.0.0
 
 Initial setup steps Windows:
 1. Open a cmd prompt in the server folder.
@@ -22,9 +22,16 @@ Initial setup steps Windows:
 4. Install flask with "pip install Flask"
 5. To start flask, open Powershell and run:
     > $env:FLASK_ENV = "development"
-    > flask run
+    > flask run --host=0.0.0.0
 
 To initialize the db:
 1. Follow steps 1, 3, & 5 for your system.
 2. Run: "flask init-db"
    You should see "Initialized the database."
+
+To run the server after initial setup:
+1. Do steps 1, 3, & 5 for your macOS
+
+Notes:
+"--host=0.0.0.0" broadcasts the webpage to the network your device is on. This allows you to connect to the webpage from a 
+different device by putting in the host device ip address and port into your web browser.
