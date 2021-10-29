@@ -62,7 +62,7 @@ def get_endpoints():
 def get_notification_settings():
     network_id = get_network_id()
 
-    d = {"phone_number": '', "sms_alert_interval": '', "webhook_url": '', "heart_beat_alert_interval": 120}
+    d = {"phone_number": '', "sms_alert_interval": 10, "webhook_url": '', "heart_beat_alert_interval": 120}
     
     with closing(get_db_connection()) as connection:
         with closing(connection.cursor()) as cursor:  
