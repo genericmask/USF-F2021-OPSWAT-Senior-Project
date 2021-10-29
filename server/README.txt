@@ -25,7 +25,7 @@ Initial setup steps Windows:
     > flask run --host=0.0.0.0
 
 To initialize the db:
-1. Follow steps 1, 3, & 5 for your system.
+1. Follow steps 1 and 3 for your system.
 2. Run: "flask init-db"
    You should see "Initialized the database."
 
