@@ -6,4 +6,4 @@ def sendText(phoneNumber, body):
     to=phoneNumber, 
     from_="+12182749208",
     body=body)
-    print(message.sid)
+    #print(message.sid)

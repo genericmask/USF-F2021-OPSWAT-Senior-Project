@@ -1,33 +1,72 @@
 import time
+import datetime
 from TextAlert import sendText
 
+PHONE_NUMBER = '+13213551122'
 
 class Alert:
-    def __init__(self, delay=10):
+    #def __init__(self, delay=100):
+    def __init__(self, delay=100):
         '''
             delay = message time delay in sec
         '''
         self.delay = delay
-        self.timeStart = -delay
+        self.broken = []
+        self.time_start_list = []
         
-    def set_delay(self, delay=10):
+
+    def set_delay(self, delay=100):
         self.delay = delay
 
-    def send(self, priority='working', ip=''):
-        timestamp = time.time() - self.timeStart
-        if timestamp < self.delay:
-            # Exist if messesga is too frequent
-            print('alert skipped \n\n')
-            return 
 
+    def send(self, priority, ip):
         if priority == 'high':
-            print(ip + ' is down - Invalid Access (high warning)\n\n')
-            sendText('+18134465250', ip + " was reached when it shouldnt have been - Invalid Access (high warning)")
             self.timeStart = time.time()
+            #track = 0
+            for index, i in enumerate(self.broken):
+                if (i == str(ip)):
+                    if ((time.time() - self.time_start_list[index]) > self.delay):
+                        print('\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
+                        '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+
+                        #sendText(PHONE_NUMBER, '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
+                        #'\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+                    return
+            
+            print('\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
+            '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+
+            #sendText(PHONE_NUMBER, '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
+            #'\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+            self.broken.append(str(ip))
+            self.time_start_list.append(time.time())
+
         elif priority == 'low':
-            print(ip + ' is down - Invalid Access (low warning)\n\n')
-            sendText('+18134465250', ip + " wasn't able to be reached when it shouldn't have been - Invalid Access (low warning)")
+            
             self.timeStart = time.time()
+            for index, i in enumerate(self.broken):
+                if (i == str(ip)):
+                    print('\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
+                    '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+
+                    #sendText(PHONE_NUMBER, '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
+                    #'\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+                    return
+            
+            self.broken.append(str(ip))
+            self.time_start_list.append(time.time())
+            print('\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
+            '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+
+            #sendText(PHONE_NUMBER, '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
+            #'\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
         else:
+            for index, i in enumerate(self.broken):
+                if (i == str(ip)):
+                    self.broken.remove(str(ip))
+                    self.time_start_list.pop(index)
+                    print("\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
+                    #sendText(PHONE_NUMBER, "\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
+                    return
             print(ip + ' is working\n\n')
             self.timeStart = time.time()
