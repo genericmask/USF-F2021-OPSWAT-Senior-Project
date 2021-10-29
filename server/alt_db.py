@@ -58,11 +58,11 @@ def get_endpoints():
 
     return endpoints
 
-# @return : a dictionary containing the phone_number, alert_interval, webhook_url
+# @return : a dictionary containing the phone_number, sms_alert_interval, webhook_url
 def get_notification_settings():
     network_id = get_network_id()
 
-    d = {"phone_number": '', "alert_interval": '', "webhook_url": ''}
+    d = {"phone_number": '', "sms_alert_interval": '', "webhook_url": ''}
     
     with closing(get_db_connection()) as connection:
         with closing(connection.cursor()) as cursor:  

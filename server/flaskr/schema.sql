@@ -31,8 +31,9 @@ CREATE TABLE notification_settings (
     notification_settings_id INTEGER PRIMARY KEY AUTOINCREMENT,
     network_id INTEGER NOT NULL,
     phone_number TEXT,
-    alert_interval NUMBER DEFAULT 10,
+    sms_alert_interval NUMBER DEFAULT 10,
     webhook_url TEXT,
+    heart_beat_alert_interval NUMBER DEFAULT 120
     FOREIGN KEY (network_id)
         REFERENCES networks (network_id)
 )

@@ -12,7 +12,7 @@ def upload():
 
         error = None
         # TODO: Validate the request and form values
-        form_params = ["phone_number", "alert_interval", "webhook_url"]
+        form_params = ["phone_number", "sms_alert_interval", "webhook_url", "heart_beat_alert_interval"]
 
         if error is None:
             print(insert_notification_settings(request.form))

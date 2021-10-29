@@ -19,8 +19,8 @@ class Alert:
 
         '''
         delay = 120
-        #print(get_notification_settings()['alert_interval'])
-        self.delay = get_notification_settings()['alert_interval']*60
+        #print(get_notification_settings()['sms_alert_interval'])
+        self.delay = get_notification_settings()['sms_alert_interval']*60
         #print(self.delay)
         self.broken = []
         self.time_start_list = []
