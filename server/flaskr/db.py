@@ -97,7 +97,7 @@ def insert_endpoints(csv):
 
 # notifications
 
-# @param=settings : a dictionary containing the phone_number, sms_alert_interval, webhook_url, and webhook_alert_interval,
+# @param=settings : a dictionary containing the phone_number, alert_interval, webhook_url
 def insert_notification_settings(settings):
     print("Inserting settings into DB: ", settings)
 
