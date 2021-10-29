@@ -71,7 +71,8 @@ def get_notification_settings():
             ).fetchone()
 
     # TODO: This will throw a key error if the row doesn't contain anything
-    for key in d:
-        d[key] = row[key]
+    if row.length > 1:
+        for key in d:
+            d[key] = row[key]
 
     return d
