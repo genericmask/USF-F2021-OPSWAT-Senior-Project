@@ -128,7 +128,7 @@ def insert_notification_settings(settings):
 
     try:
         db.execute(
-            "INSERT INTO notification_settings (network_id, phone_number, sms_alert_interval, webhook_url, heart_beat_alert_interval) VALUES (?, ?, ?, ?)", (network_id, settings["phone_number"], settings["sms_alert_interval"], settings["webhook_url"], settings["heart_beat_alert_interval"],)
+            "INSERT INTO notification_settings (network_id, phone_number, sms_alert_interval, webhook_url, heart_beat_alert_interval) VALUES (?, ?, ?, ?, ?)", (network_id, settings["phone_number"], settings["sms_alert_interval"], settings["webhook_url"], settings["heart_beat_alert_interval"],)
         )
         db.commit()
     except BaseException as err:
