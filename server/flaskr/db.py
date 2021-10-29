@@ -142,7 +142,7 @@ def get_notification_settings():
     network_id = get_network_id()
     db = get_db()
 
-    d = {"phone_number": '', "sms_alert_interval": '', "webhook_url": '', "heart_beat_alert_interval": ''}
+    d = {"phone_number": '', "sms_alert_interval": '', "webhook_url": '', "heart_beat_alert_interval": 120}
     
     row = db.execute(
         "SELECT * FROM notification_settings WHERE network_id = ?", (network_id,)
