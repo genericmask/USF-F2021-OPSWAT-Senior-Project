@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Home{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <h1>Upload Access List .CSV File</h1>
+    <form action="endpoints/upload" method=post enctype=multipart/form-data>
+        <input type = file name = file>
+        <input type = submit value = Upload>
+    </form>
+    <div id="configureNotifications">
+      <h1>Configure Notifications</h1>
+      <form action="notifications/configure" method=post enctype=multipart/form-data>
+
+        <label for="phoneNumberInput">SMS Phone Number</label>
+        <input id="phoneNumberInput" type="tel" name="phone_number">
+
+        <label for="alertIntervalInput">SMS Alert Interval (minutes)</label>
+        <input id="alertIntervalInput" type="number" name="sms_alert_interval" value="10">
+
+        <label for="webhookURLInput">Webhook URL</label>
+        <input id="webhookURLInput" type="text" name="webhook_url">
+
+        <label for="heartBeatAlertIntervalInput">Heart Beat Alert Interval (minutes)</label>
+        <input id="heartBeatAlertIntervalInput" type="number" name="heart_beat_alert_interval" value="120">
+
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div id="documentation">
+      <h1>Documentation</h1>
+      <h3>Webhook</h3>
+      <span>POST Payload: JSON</span><br>
+      <span>Format: { ip: String, failure_description: String, start_datetime: datetime, end_datetime: datetime || null }</span>
+    </div>
+    
+{% endblock %}
