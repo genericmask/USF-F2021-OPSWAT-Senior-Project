@@ -42,7 +42,7 @@ To initialize the db:
    You should see "Initialized the database."
 
 To run the server after initial setup:
-1. Do steps 1, 3, & 5 for your OS
+1. Do steps 1, 3, & 5 of initial setup for your OS
 
 Notes:
 "--host=0.0.0.0" broadcasts the webpage to the network your device is on. This allows you to connect to the webpage from a 
