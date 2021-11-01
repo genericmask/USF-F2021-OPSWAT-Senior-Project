@@ -23,7 +23,7 @@ Initial setup steps Windows:
 4. Install flask with "pip install Flask"
 5. Install twilio with "pip install twilio"
 6. To start flask, run:
-    > set FLASK_APP=hello
+    > set FLASK_APP=flaskr
     > flask run
 
 To initialize the db:
