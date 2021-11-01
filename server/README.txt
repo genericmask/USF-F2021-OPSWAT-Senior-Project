@@ -1,3 +1,5 @@
+Works with Python 3.9.5 and (possibly?) 3.7.x
+
 This was made following (some of) the Flask tutorial: https://flask.palletsprojects.com/en/2.0.x/tutorial/
 
 Setup steps from https://flask.palletsprojects.com/en/2.0.x/installation/
