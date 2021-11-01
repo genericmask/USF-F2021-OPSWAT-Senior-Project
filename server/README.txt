@@ -24,6 +24,7 @@ Initial setup steps Windows:
 5. Install twilio with "pip install twilio"
 6. To start flask, run:
     > set FLASK_APP=flaskr
+    > set FLASK_ENV=development
     > flask run
 
 To initialize the db:
@@ -33,8 +34,9 @@ To initialize the db:
     $ export FLASK_APP=flaskr
     $ export FLASK_ENV=development
 
-    Powershell:
-    > $env:FLASK_ENV = "development"
+    cmd prompt:
+    > set FLASK_APP=flaskr
+    > set FLASK_ENV=development
 
 3. Run: "flask init-db"
    You should see "Initialized the database."
