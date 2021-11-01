@@ -22,9 +22,9 @@ Initial setup steps Windows:
     show the name of the activated environment.
 4. Install flask with "pip install Flask"
 5. Install twilio with "pip install twilio"
-6. To start flask, open Powershell and run:
-    > $env:FLASK_ENV = "development"
-    > flask run --host=0.0.0.0
+6. To start flask, run:
+    > set FLASK_APP=hello
+    > flask run
 
 To initialize the db:
 1. Follow steps 1 and 3 of initial setup for your system.
