@@ -29,7 +29,6 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    # a simple page that says hello
     @app.route('/')
     def home():
         return render_template('home.html')
