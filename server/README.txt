@@ -10,14 +10,13 @@ Initial setup steps macOS/Linux:
 2. Create a venv folder with "python3 -m venv venv"
 3. Activate the environment with ". venv/bin/activate". Your shell prompt wil change to
     show the name of the activated environment.
-4. Install flask with "pip install Flask"
-5. Install twilio with "pip install twilio"
-6. Initialize environment variables: 
+4. Install dependencies with "pip install Flask twilio WTForms phonenumbers"
+5. Initialize environment variables: 
     $ export FLASK_APP=flaskr
     $ export FLASK_ENV=development
-7. Initialize the database by running: "flask init-db"
+6. Initialize the database by running: "flask init-db"
    You should see "Initialized the database."
-8. Start flask:
+7. Start flask:
     $ flask run --host=0.0.0.0
 
 Initial setup steps Windows:
@@ -25,21 +24,20 @@ Initial setup steps Windows:
 2. Create a venv folder with "py -3 -m venv venv"
 3. Active the environment with "venv\Scripts\activate". Your shell prompt wil change to
     show the name of the activated environment.
-4. Install flask with "pip install Flask"
-5. Install twilio with "pip install twilio"
-6. Initialize environment variables: 
+4. Install dependencies with "pip install Flask twilio WTForms phonenumbers"
+5. Initialize environment variables: 
     > set FLASK_APP=flaskr
     > set FLASK_ENV=development
-7. Initialize the database by running: "flask init-db"
+6. Initialize the database by running: "flask init-db"
    You should see "Initialized the database."
-8. Start flask:
+7. Start flask:
      > flask run
 
 To re-initialize the db:
-1. Follow steps 1, 3, 6, and 7 of initial setup for your OS
+1. Follow steps 1, 3, 5, and 6 of initial setup for your OS
 
 To run the server after initial setup:
-1. Follow steps 1, 3, 6, and 8 of initial setup for your OS
+1. Follow steps 1, 3, 5, and 7 of initial setup for your OS
 
 To start the pinger:
 1. Do steps 1 and 3 of initial setup for your OS

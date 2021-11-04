@@ -6,28 +6,22 @@
 
 {% block content %}
     <h1>Upload Access List .CSV File</h1>
-    <form action="endpoints/upload" method=post enctype=multipart/form-data>
+    <form action="endpoints" method=post enctype=multipart/form-data>
         <input type = file name = file>
         <input type = submit value = Upload>
     </form>
     <div id="configureNotifications">
       <h1>Configure Notifications</h1>
-      <form action="notifications/configure" method=post enctype=multipart/form-data>
-
-        <label for="phoneNumberInput">SMS Phone Number</label>
-        <input id="phoneNumberInput" type="tel" name="phone_number">
-
-        <label for="alertIntervalInput">SMS Alert Interval (minutes)</label>
-        <input id="alertIntervalInput" type="number" name="sms_alert_interval" value="10">
-
-        <label for="webhookURLInput">Webhook URL</label>
-        <input id="webhookURLInput" type="text" name="webhook_url">
-
-        <label for="heartBeatAlertIntervalInput">Heart Beat Alert Interval (minutes)</label>
-        <input id="heartBeatAlertIntervalInput" type="number" name="heart_beat_alert_interval" value="120">
-
-        <input type="submit" value="Submit">
-      </form>
+      {% from "_formhelpers.html" import render_field %}
+        <form action="notifications" method=post>
+          <dl>
+            {{ render_field(notifications_form.phone_number) }}
+            {{ render_field(notifications_form.sms_alert_interval) }}
+            {{ render_field(notifications_form.webhook_url) }}
+            {{ render_field(notifications_form.heart_beat_alert_interval) }}
+          </dl>
+          <p><input type=submit value=Submit>
+        </form>
     </div>
     <div id="documentation">
       <h1>Documentation</h1>

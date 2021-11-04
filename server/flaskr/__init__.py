@@ -4,7 +4,6 @@ from flask import (
     Flask, render_template
 )
 
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -29,13 +28,12 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    @app.route('/')
-    def home():
-        return render_template('home.html')
+    # @app.route('/')
+    # def home():
+    #     return render_template('home.html')
 
-    from . import endpoints, notifications
-    app.register_blueprint(endpoints.bp)
-    app.register_blueprint(notifications.bp)
+    from . import home
+    app.register_blueprint(home.bp)
 
     return app
 
