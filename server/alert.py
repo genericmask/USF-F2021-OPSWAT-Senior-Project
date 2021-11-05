@@ -2,7 +2,7 @@ import time
 
 import datetime
 
-from TextAlert import sendText
+#from TextAlert import sendText
 
 from alt_db import get_notification_settings
 
@@ -49,15 +49,15 @@ class Alert:
                         ' has been occuring for ' + str(self.count) + ' minutes\nThe expected result was NO ACCESS but the actual result was ACCESS \n' + '\n\n')
                         
                         self.time_start_list[index] = time.time()
-                        sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
-                        '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+                        #sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
+                        #'\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
                     return
 
             print('\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
             '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
 
-            sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
-            '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+            #sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
+            #'\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
             self.broken.append(str(ip))
             self.time_start_list.append(time.time())
 
@@ -75,8 +75,8 @@ class Alert:
 
                       self.time_start_list[index] = time.time()
 
-                      sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
-                      '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+                      #sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
+                      #'\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
 
                    return
 
@@ -85,8 +85,8 @@ class Alert:
             print('\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
             '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
 
-            sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
-            '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+            #sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
+            #'\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
 
         else:
 
@@ -96,7 +96,7 @@ class Alert:
                     self.broken.remove(str(ip))
                     self.time_start_list.pop(index)
                     print("\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
-                    sendText(get_notification_settings()['phone_number'], "\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
+                    #sendText(get_notification_settings()['phone_number'], "\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
                     return
 
             print(ip + ' is working\n\n')
