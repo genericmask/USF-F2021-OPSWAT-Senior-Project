@@ -45,6 +45,13 @@ To start the pinger:
 1. Do steps 1 and 3 of initial setup for your OS
 2. Run the pinger.py file
 
+To run as docker container:
+1. Open a terminal in the server folder.
+2. Build the image.
+    > sudo docker build -t nacchecker .
+3. Run the container.
+    > sudo docker run --name nac -d -p 5000:5000 nacchecker:latest
+
 Notes:
 "--host=0.0.0.0" broadcasts the webpage to the network your device is on. This allows you to connect to the webpage from a 
 different device by putting in the host device ip address and port into your web browser.
