@@ -52,6 +52,7 @@ def insert_into_db(sql, params):
                 sql, params
             )
             connection.commit()
+            return cursor.execute("SELECT LAST_INSERT_ROWID() as ID").fetchone()['ID']
 
 def get_SSID():
     return check_network()
@@ -76,8 +77,8 @@ def get_network_id():
 # @return : an array containing an object with ip (str) and accessible (bool) properties
 def get_endpoints():
     network_id = get_network_id()
-    rows = get_from_db("SELECT endpoint, accessible FROM endpoints WHERE network_id = ?", (network_id,))
-    endpoints = [{'ip': ep["endpoint"], 'accessible': ep["accessible"]=='TRUE'} for ep in rows]
+    rows = get_from_db("SELECT endpoint_id, endpoint, accessible FROM endpoints WHERE network_id = ?", (network_id,))
+    endpoints = [{'ip': ep["endpoint"], 'accessible': ep["accessible"]=='TRUE', 'id': ep["endpoint_id"]} for ep in rows]
     return endpoints
 
 # @return : a dictionary containing the phone_number, sms_alert_interval, webhook_url
@@ -127,3 +128,11 @@ def insert_endpoints(csv):
         return False
 
     return True
+
+def insert_alert(alert):
+    return insert_into_db("INSERT INTO alerts (start_datetime, end_datetime, endpoint_id, failure_type) VALUES (?, ?, ?, ?)", (alert.start_time, alert.end_time, alert.endpoint_id, alert.failure_type,))
+
+def update_alert(alert):
+    sql = "UPDATE alerts SET start_datetime = ?, end_datetime = ?, endpoint_id = ?, failure_type = ? WHERE alert_id = ?"
+    params = (alert.start_time, alert.end_time, alert.endpoint_id, alert.failure_type, alert.id,)
+    insert_into_db(sql, params)
