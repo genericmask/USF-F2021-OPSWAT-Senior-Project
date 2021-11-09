@@ -3,8 +3,7 @@ from flask import (
 )
 from flaskr.db import insert_notification_settings, insert_endpoints
 from flaskr.validators.csvEndpointsValidator import csvEndpointsValidator
-from wtforms import Form, BooleanField, StringField, IntegerField, validators, ValidationError
-from wtforms.fields.html5 import TelField, URLField
+from wtforms import Form, BooleanField, StringField, IntegerField, validators, ValidationError, TelField, URLField
 import phonenumbers
 
 ALLOWED_EXTENSIONS = {'csv'}
