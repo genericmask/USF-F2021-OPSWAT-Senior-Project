@@ -4,7 +4,6 @@ import requests
 import datetime
 
 from server.alert import Alert
-dataList = []
 
 
 def Post():
