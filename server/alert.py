@@ -28,12 +28,13 @@ class Alert:
         self.count = 0
         self.ip = ""
         self.failure_description = ""
+        self.jsonExport = []
 
     def set_delay(self, delay=100):
         self.delay = delay
 
-    def get_ip(self):
-        return self.ip
+    def getJson(self):
+        return self.jsonExport
 
     def send(self, priority, ip):
         self.ip = ip
@@ -110,7 +111,4 @@ class Alert:
              "failure_description": self.failure_description,
              "start_datetime": self.timeStart,
              "end_datetime": None}
-        y = json.dumps(x)
-        jsonFile = open("webhookData.txt", "w")
-        jsonFile.write(y)
-        jsonFile.close()
+        self.jsonExport.append(x)
