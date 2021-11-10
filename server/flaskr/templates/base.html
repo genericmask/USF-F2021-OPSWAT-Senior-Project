@@ -1,5 +1,8 @@
 <!doctype html>
-<title>{% block title %}{% endblock %}</title>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {{ turbo() }}
+</head>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
   <h1>NAC Checker</h1>
@@ -13,5 +16,6 @@
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
+  {% include "tables.html" %}
   {% block content %}{% endblock %}
 </section>

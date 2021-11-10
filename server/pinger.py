@@ -75,19 +75,19 @@ class Pinger:
         if pingResp and (not endpoint['accessible']):
             #pingtest = self.ping(endpoint['ip'])
             #if pingtest and (not endpoint['accessible']):
-                self.alert.send(priority='high', endpoint_id=endpoint['id'])
+                self.alert.send(priority='high', endpoint=endpoint)
                 return False
             #return True 
 
         elif (not pingResp) and endpoint['accessible']:
             #pingtest = self.ping(endpoint['ip'])
             #if (not pingtest) and (endpoint['accessible']):
-                self.alert.send(priority='low', endpoint_id=endpoint['id'])
+                self.alert.send(priority='low', endpoint=endpoint)
                 return False
             #return True
 
         else:
-            self.alert.send(priority='working', endpoint_id=endpoint['id'])
+            self.alert.send(priority='working', endpoint=endpoint)
             return True
     
     def run_checker(self):

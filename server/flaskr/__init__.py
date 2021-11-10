@@ -1,8 +1,11 @@
 import os
-
+from flaskr.db import get_alerts, get_endpoints
 from flask import ( 
     Flask, render_template
 )
+from turbo_flask import Turbo
+import threading
+import time
 
 def create_app(test_config=None):
     # create and configure the app
@@ -34,3 +37,49 @@ def create_app(test_config=None):
     return app
 
 app = create_app()
+turbo = Turbo(app)
+
+# @arr : an array of dictionaries
+def makeTable(arr):
+    # Table is a dictionary with a "header" property containing an array of column names
+    # and a "rows" property containing an array of arrays that contain column values  
+    table = {
+        "header" : [],
+        "rows" : []
+    }
+    if len(arr) > 0:
+        keys = arr[0].keys()
+        for key in keys:
+            table["header"].append(key.upper())
+        
+        for element in arr:
+            row = []
+            for key in keys:
+                row.append(element[key])
+            table["rows"].append(row)
+
+    return table
+
+def getEndpointsTable():
+    endpoints = get_endpoints()  
+    return makeTable(endpoints)
+
+def getAlertsTable():
+    alerts = get_alerts()
+    return makeTable(alerts)
+
+@app.context_processor
+def inject_tables():
+    alerts_table = getAlertsTable()
+    endpoints_table = getEndpointsTable()
+    return {'alerts_table' : alerts_table, 'endpoints_table' : endpoints_table}
+
+def update_tables():
+    with app.app_context():
+        while True:
+            time.sleep(5)
+            turbo.push(turbo.update(render_template('tables.html'), 'tables'))
+
+@app.before_first_request
+def before_first_request():
+    threading.Thread(target=update_tables).start()
