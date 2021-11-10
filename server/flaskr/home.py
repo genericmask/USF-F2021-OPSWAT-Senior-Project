@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, g, redirect, request, render_template, session, url_for, flash
 )
-from flaskr.db import insert_notification_settings, insert_endpoints
+from flaskr.db import insert_notification_settings, insert_endpoints, get_endpoints, get_alerts
 from flaskr.validators.csvEndpointsValidator import csvEndpointsValidator
 from wtforms import Form, BooleanField, StringField, IntegerField, validators, ValidationError, TelField, URLField
 import phonenumbers
@@ -29,12 +29,41 @@ class NotificationsForm(Form):
             except:
                 raise ValidationError('Invalid phone number.')
 
+# @arr : an array of dictionaries
+def makeTable(arr):
+    # Table is a dictionary with a "header" property containing an array of column names
+    # and a "rows" property containing an array of arrays that contain column values  
+    table = {
+        "header" : [],
+        "rows" : []
+    }
+    if len(arr) > 0:
+        keys = arr[0].keys()
+        for key in keys:
+            table["header"].append(key.upper())
+        
+        for element in arr:
+            row = []
+            for key in keys:
+                row.append(element[key])
+            table["rows"].append(row)
+
+    return table
+
+def getEndpointsTable():
+    endpoints = get_endpoints()  
+    return makeTable(endpoints)
+
+def getAlertsTable():
+    alerts = get_alerts()
+    return makeTable(alerts)
+
 bp = Blueprint('home', __name__, url_prefix = '/')
 
 @bp.route('/', methods = ('GET',))
 def home():
     notifications_form = NotificationsForm()
-    return render_template('home.html', notifications_form=notifications_form)
+    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable(), alerts_table=getAlertsTable())
 
 @bp.route('/notifications', methods = ('GET', 'POST'))
 def notifications():
@@ -53,7 +82,7 @@ def notifications():
         else:
             flash(error)
 
-    return render_template('home.html', notifications_form=notifications_form)
+    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable(), alerts_table=getAlertsTable())
 
 def allowed_file(filename):
         return '.' in filename and \
@@ -87,9 +116,8 @@ def endpoints():
                     insert_endpoints(csv_string)
                     flash('Thank you')
                     
-                    return render_template('home.html', notifications_form=notifications_form)
+                    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable(), alerts_table=getAlertsTable())
 
         flash(error)
-            
 
-    return render_template('home.html', notifications_form=notifications_form)
+    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable(), alerts_table=getAlertsTable())
