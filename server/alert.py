@@ -6,7 +6,7 @@ from TextAlert import sendText
 
 from flaskr.db import get_notification_settings
 
-import json
+import requests
 
 
 class Alert:
@@ -28,13 +28,9 @@ class Alert:
         self.count = 0
         self.ip = ""
         self.failure_description = ""
-        self.jsonExport = []
 
     def set_delay(self, delay=100):
         self.delay = delay
-
-    def getJson(self):
-        return self.jsonExport
 
     def send(self, priority, ip):
         self.ip = ip
@@ -111,4 +107,7 @@ class Alert:
              "failure_description": self.failure_description,
              "start_datetime": self.timeStart,
              "end_datetime": None}
-        self.jsonExport.append(x)
+
+        url = "https://webhook.site/baad271b-1c0e-4559-8d97-1be1566c0690"
+
+        requests.post(url, data=x)
