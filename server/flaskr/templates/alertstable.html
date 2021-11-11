@@ -1,11 +1,7 @@
-<div id="tables">
+<div id="alertstable">
     <div>
         <h1>Alerts</h1>
         {% from "_tablehelpers.html" import render_table %}
         {{ render_table(alerts_table) }}
-    </div>
-    <div>
-        <h1>Endpoints</h1>
-        {{ render_table(endpoints_table) }}
     </div>
 </div>

@@ -10,7 +10,7 @@ Initial setup steps macOS/Linux:
 2. Create a venv folder with "python3 -m venv venv"
 3. Activate the environment with ". venv/bin/activate". Your shell prompt wil change to
     show the name of the activated environment.
-4. Install dependencies with "pip install Flask twilio WTForms phonenumbers"
+4. Install dependencies with "pip install Flask twilio WTForms phonenumbers turbo_flask"
 5. Initialize environment variables: 
     $ export FLASK_APP=flaskr
     $ export FLASK_ENV=development
@@ -24,7 +24,7 @@ Initial setup steps Windows:
 2. Create a venv folder with "py -3 -m venv venv"
 3. Active the environment with "venv\Scripts\activate". Your shell prompt wil change to
     show the name of the activated environment.
-4. Install dependencies with "pip install Flask twilio WTForms phonenumbers"
+4. Install dependencies with "pip install Flask twilio WTForms phonenumbers turbo_flask"
 5. Initialize environment variables: 
     > set FLASK_APP=flaskr
     > set FLASK_ENV=development

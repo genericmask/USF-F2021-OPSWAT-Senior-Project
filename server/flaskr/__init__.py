@@ -71,15 +71,14 @@ def getAlertsTable():
 @app.context_processor
 def inject_tables():
     alerts_table = getAlertsTable()
-    endpoints_table = getEndpointsTable()
-    return {'alerts_table' : alerts_table, 'endpoints_table' : endpoints_table}
+    return {'alerts_table' : alerts_table}
 
-def update_tables():
+def update_alerts_table():
     with app.app_context():
         while True:
             time.sleep(5)
-            turbo.push(turbo.update(render_template('tables.html'), 'tables'))
+            turbo.push(turbo.update(render_template('alertstable.html'), 'alertstable'))
 
 @app.before_first_request
 def before_first_request():
-    threading.Thread(target=update_tables).start()
+    threading.Thread(target=update_alerts_table).start()

@@ -16,6 +16,6 @@
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
-  {% include "tables.html" %}
+  {% include "alertstable.html" %}
   {% block content %}{% endblock %}
 </section>

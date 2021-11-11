@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+    <div>
+      <h1>Endpoints</h1>
+      {% from "_tablehelpers.html" import render_table %}
+      {{ render_table(endpoints_table) }}
+    </div>
     <h1>Upload Access List .CSV File</h1>
     <form action="endpoints" method=post enctype=multipart/form-data>
         <input type = file name = file>
