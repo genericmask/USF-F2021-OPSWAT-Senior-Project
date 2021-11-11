@@ -58,7 +58,6 @@ def makeTable(arr, header = [], keys = []):
 
 def getEndpointsTable():
     endpoints = get_endpoints()
-    print(endpoints)
     header = [ "ID", "IP", "ACCESSIBLE"]
     keys = ["id", "ip", "accessible"]
     return makeTable(endpoints, header, keys)
