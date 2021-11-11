@@ -1,9 +1,10 @@
 import platform    # For getting the operating system name
 import os, subprocess  # For executing a shell command
 import datetime
+import sys
 from alert import *
 from wificheck import check_network
-from alt_db import get_notification_settings, get_endpoints
+from flaskr.db import get_notification_settings, get_endpoints
 from TextAlert import sendText
 
 # Constants
@@ -16,7 +17,7 @@ def main():
     #elapsed_time = time.time() - start_time
     #print(elapsed_time)
     
-    pinger = Pinger(pingMaxTime=MAX_TIME, messageDelay=DELAY)
+    pinger = Pinger(pingMaxTime=MAX_TIME)
     
     #Run until the program is told otherwise
     print('\n\n-------------------------------------------\n\n')
@@ -43,26 +44,24 @@ def main():
 
 class Pinger:
 
-    def __init__(self, pingMaxTime=100, messageDelay=10):       
+    def __init__(self, pingMaxTime=100):       
         self.endpoints = get_endpoints()
         self.pingMaxTime = pingMaxTime
-        self.alert = Alert(delay=messageDelay)
+        self.alert = Alert()
 
     def ping(self, ip):
         '''
             Returns True if ip (str) responds to a ping request.
             Time (int) is the max time to wait for the ping in miliseconds.
         '''
-        # Option for the number of packets as a function of
-        #param = '-n' if platform.system().lower()=='windows' else '-c'
-
         # Building and calls the ping command
-        #response = subprocess.call(['ping', param, '3', '-w', str(self.pingMaxTime), ip])
-        #response = subprocess.call(['ping', '-c', '1', '-W', '100', ip]) #MacOS
-        # remove => "stdout=open(os.devnull, 'wb')" for ping results everytime
-        response = subprocess.call(['ping','-w', '1', ip])#, stdout=open(os.devnull, 'wb')) #Linux OS
+        if sys.platform.startswith('linux'):
+            response = subprocess.call(['ping','-w', '1', ip])#, stdout=open(os.devnull, 'wb')) #Linux OS
+        elif sys.platform.startswith('darwin'):
+            response = subprocess.call(['ping', '-c', '1', '-W', '100', ip]) #MacOS
 
-
+        #Just don't run on windows lol
+        
         # Return response
         return response == 0
         
@@ -75,19 +74,19 @@ class Pinger:
         if pingResp and (not endpoint['accessible']):
             #pingtest = self.ping(endpoint['ip'])
             #if pingtest and (not endpoint['accessible']):
-                self.alert.send(priority='high', ip=endpoint['ip'])
+                self.alert.send(failure_type='Type 2', endpoint=endpoint)
                 return False
             #return True 
 
         elif (not pingResp) and endpoint['accessible']:
             #pingtest = self.ping(endpoint['ip'])
             #if (not pingtest) and (endpoint['accessible']):
-                self.alert.send(priority='low', ip=endpoint['ip'])
+                self.alert.send(failure_type='Type 2', endpoint=endpoint)
                 return False
             #return True
 
         else:
-            self.alert.send(priority='working', ip=endpoint['ip'])
+            self.alert.send(failure_type=None, endpoint=endpoint)
             return True
     
     def run_checker(self):
