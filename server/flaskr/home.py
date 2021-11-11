@@ -30,7 +30,9 @@ class NotificationsForm(Form):
                 raise ValidationError('Invalid phone number.')
 
 # @arr : an array of dictionaries
-def makeTable(arr, header = []):
+# @header : an array of strings to be used for the column names. Should correspond to the number of keys used
+# @keys : an array of strings that can be used as keys for @arr
+def makeTable(arr, header = [], keys = []):
     # Table is a dictionary with a "header" property containing an array of column names
     # and a "rows" property containing an array of arrays that contain column values  
     table = {
@@ -38,21 +40,28 @@ def makeTable(arr, header = []):
         "rows" : []
     }
     if len(arr) > 0:
-        keys = arr[0].keys()
-        for key in keys:
-            table["header"].append(key.upper())
+        if len(keys) == 0: keys = arr[0].keys()
+        if len(header) == 0:
+            for key in keys:
+                table["header"].append(key.upper())
         
         for element in arr:
             row = []
             for key in keys:
                 row.append(element[key])
             table["rows"].append(row)
+    else:
+        if len(header) > 0:
+            table["rows"] = [["" for _ in header]]
 
     return table
 
 def getEndpointsTable():
-    endpoints = get_endpoints()  
-    return makeTable(endpoints)
+    endpoints = get_endpoints()
+    print(endpoints)
+    header = [ "ID", "IP", "ACCESSIBLE"]
+    keys = ["id", "ip", "accessible"]
+    return makeTable(endpoints, header, keys)
 
 bp = Blueprint('home', __name__, url_prefix = '/')
 
