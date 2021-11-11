@@ -4,7 +4,7 @@ import datetime
 
 from TextAlert import sendText
 
-from alt_db import get_notification_settings
+from flaskr.db import get_notification_settings
 
 
 class Alert:
