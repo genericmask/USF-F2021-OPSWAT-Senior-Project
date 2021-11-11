@@ -6,100 +6,47 @@ from TextAlert import sendText
 
 from flaskr.db import get_notification_settings
 
+from flaskr.DB_Alert import DB_Alert
+
 
 class Alert:
-
-    #def __init__(self, delay=100):
-
-    def __init__(self, delay=100):
-
-        '''
-
-            delay = message time delay in sec
-
-        '''
-        delay = 120
-        #print(get_notification_settings()['sms_alert_interval'])
+    def __init__(self):
         self.delay = get_notification_settings()['sms_alert_interval']*60
-        #print(self.delay)
-        self.broken = []
-        self.time_start_list = []
-        self.count = 0
+        self.broken = {}
 
+    def get_alert_message_by_failure_type(self, failure_type, endpoint, t):
+        if failure_type == 'Type 2':
+            return '\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(t)) + '\n\n'
+        elif failure_type == 'Type 1':
+            return '\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(t)) + '\n\n'
+        else:
+            return "\n\nThe error detected at IP " + str(endpoint['ip']) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n'
+    
+    def actually_send_alerts(self, endpoint):
+        alert = self.broken[endpoint['id']]
+        alert_message = self.get_alert_message_by_failure_type(alert.failure_type, endpoint, alert.start_time)
+        print(alert_message)
+        sendText(get_notification_settings()['phone_number'], alert_message)
 
-
-
-    def set_delay(self, delay=100):
-        self.delay = delay
-
-
-
-
-
-    def send(self, priority, ip):
-        if priority == 'high':
-            self.timeStart = time.time()
-            #track = 0
-
-            for index, i in enumerate(self.broken):
-                if (i == str(ip)): 
-                    if ((time.time() - self.time_start_list[index]) > self.delay):
-                        self.count = self.count + (self.delay / 60)
-                        print('\n\nALERT NAC FAILURE TYPE 2\nNAC Checker failure at IP ' + str(ip) + 
-                        ' has been occuring for ' + str(self.count) + ' minutes\nThe expected result was NO ACCESS but the actual result was ACCESS \n' + '\n\n')
-                        
-                        self.time_start_list[index] = time.time()
-                        sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
-                        '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
-                    return
-
-            print('\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
-            '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
-
-            sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(ip) + 
-            '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
-            self.broken.append(str(ip))
-            self.time_start_list.append(time.time())
-
-
-
-        elif priority == 'low':
-            self.timeStart = time.time()
-            for index, i in enumerate(self.broken):
-                if (i == str(ip)):
-                   #print(time.time() - self.time_start_list[index])
-                   if ((time.time() - self.time_start_list[index]) > self.delay):
-                      self.count = self.count + (self.delay / 60)
-                      print('\n\nALERT NAC FAILURE TYPE 1\nNAC Checker failure at IP  ' + str(ip) + 
-                      ' has been occuring for ' + str(self.count) + ' minutes\nThe expected result was ACCESS but the actual result was NO ACCESS \n' + '\n\n')
-
-                      self.time_start_list[index] = time.time()
-
-                      sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
-                      '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
-
-                   return
-
-            self.broken.append(str(ip))
-            self.time_start_list.append(time.time())
-            print('\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
-            '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
-
-            sendText(get_notification_settings()['phone_number'], '\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(ip) + 
-            '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(time.time())) + '\n\n')
+    def send(self, failure_type, endpoint):
+        now = time.time()
+        
+        if failure_type == 'Type 2' or failure_type == 'Type 1':
+            # Add the endpoint if it isn't in the broken dict
+            if endpoint['id'] not in self.broken:
+                self.broken[endpoint['id']] = DB_Alert(endpoint_id=endpoint['id'], failure_type=failure_type, start_time=now)
+            
+            # Send the alerts if enough time has passed since the last time an alert for the endpoint was sent
+            if (time.time() - self.broken[endpoint['id']].time_alert_sent > self.delay):
+                self.broken[endpoint['id']].time_alert_sent = now
+                self.actually_send_alerts(endpoint)
 
         else:
-
-            for index, i in enumerate(self.broken):
-
-                if (i == str(ip)):
-                    self.broken.remove(str(ip))
-                    self.time_start_list.pop(index)
-                    print("\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
-                    sendText(get_notification_settings()['phone_number'], "\n\nThe error detected at IP " + str(ip) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n')
-                    return
-
-            print(ip + ' is working\n\n')
-
-            self.timeStart = time.time()
+            # Something works properly now! Yay!
+            # Only send an alert if there was a corresponding broken alert sent at some point
+            if endpoint['id'] in self.broken:
+                self.broken[endpoint['id']].end_time = now
+                self.broken[endpoint['id']].save() # Save the updated alert to the db before we delete it from memory
+                self.actually_send_alerts(endpoint)
+                del self.broken[endpoint['id']]
 
