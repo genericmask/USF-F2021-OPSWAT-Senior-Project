@@ -14,17 +14,18 @@ class Alert:
         self.delay = get_notification_settings()['sms_alert_interval']*60
         self.broken = {}
 
-    def get_alert_message_by_failure_type(self, failure_type, endpoint, t):
-        if failure_type == 'Type 2':
-            return '\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detect at ' + str(time.ctime(t)) + '\n\n'
-        elif failure_type == 'Type 1':
-            return '\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detect at ' + str(time.ctime(t)) + '\n\n'
-        else:
+    def get_alert_message_by_failure_type(self, failure_type, endpoint, t, working):
+        if working:
             return "\n\nThe error detected at IP " + str(endpoint['ip']) + " has been fixed\n" + 'Fix occured at ' + str(time.ctime(time.time())) + '\n\n'
+        elif failure_type == 'Type 2':
+            return '\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detected at ' + str(time.ctime(t)) + '\n\n'
+        else:
+            return '\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detected at ' + str(time.ctime(t)) + '\n\n'
+
     
-    def actually_send_alerts(self, endpoint):
+    def actually_send_alerts(self, endpoint, working):
         alert = self.broken[endpoint['id']]
-        alert_message = self.get_alert_message_by_failure_type(alert.failure_type, endpoint, alert.start_time)
+        alert_message = self.get_alert_message_by_failure_type(alert.failure_type, endpoint, alert.start_time, working)
         print(alert_message)
         sendText(get_notification_settings()['phone_number'], alert_message)
 
@@ -39,7 +40,7 @@ class Alert:
             # Send the alerts if enough time has passed since the last time an alert for the endpoint was sent
             if (time.time() - self.broken[endpoint['id']].time_alert_sent > self.delay):
                 self.broken[endpoint['id']].time_alert_sent = now
-                self.actually_send_alerts(endpoint)
+                self.actually_send_alerts(endpoint, False)
 
         else:
             # Something works properly now! Yay!
@@ -47,6 +48,6 @@ class Alert:
             if endpoint['id'] in self.broken:
                 self.broken[endpoint['id']].end_time = now
                 self.broken[endpoint['id']].save() # Save the updated alert to the db before we delete it from memory
-                self.actually_send_alerts(endpoint)
+                self.actually_send_alerts(endpoint, True)
                 del self.broken[endpoint['id']]
 
