@@ -68,6 +68,12 @@ def makeTable(arr, header = [], keys = []):
 
 def getAlertsTable():
     alerts = get_alerts()
+    for alert in alerts:
+        if alert["start_datetime"] != None:
+            alert["start_datetime"] = time.ctime(int(float(alert["start_datetime"])))
+        if alert["end_datetime"] != None:
+            alert["end_datetime"] = time.ctime(int(float(alert["end_datetime"])))
+
     header = ["ALERT ID", "FAILURE TYPE", "ENDPOINT ID", "ENDPOINT", "START DATE TIME", "END DATE TIME"]
     keys = ["alert_id", "failure_type", "endpoint_id", "endpoint", "start_datetime", "end_datetime"]
     return makeTable(alerts, header, keys)
