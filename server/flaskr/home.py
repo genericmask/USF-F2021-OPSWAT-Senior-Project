@@ -1,10 +1,12 @@
 from flask import (
-    Blueprint, g, redirect, request, render_template, session, url_for, flash
+    Blueprint, g, request, render_template, session, flash
 )
-from flaskr.db import insert_notification_settings, insert_endpoints, get_endpoints
+from flaskr.db import insert_notification_settings, insert_endpoints
 from flaskr.validators.csvEndpointsValidator import csvEndpointsValidator
-from wtforms import Form, BooleanField, StringField, IntegerField, validators, ValidationError, TelField, URLField
+from flaskr.tables import get_endpoints_table
+from wtforms import Form, IntegerField, validators, ValidationError, TelField, URLField
 import phonenumbers
+
 
 ALLOWED_EXTENSIONS = {'csv'}
 
@@ -29,45 +31,12 @@ class NotificationsForm(Form):
             except:
                 raise ValidationError('Invalid phone number.')
 
-# @arr : an array of dictionaries
-# @header : an array of strings to be used for the column names. Should correspond to the number of keys used
-# @keys : an array of strings that can be used as keys for @arr
-def makeTable(arr, header = [], keys = []):
-    # Table is a dictionary with a "header" property containing an array of column names
-    # and a "rows" property containing an array of arrays that contain column values  
-    table = {
-        "header" : header,
-        "rows" : []
-    }
-    if len(arr) > 0:
-        if len(keys) == 0: keys = arr[0].keys()
-        if len(header) == 0:
-            for key in keys:
-                table["header"].append(key.upper())
-        
-        for element in arr:
-            row = []
-            for key in keys:
-                row.append(element[key])
-            table["rows"].append(row)
-    else:
-        if len(header) > 0:
-            table["rows"] = [["" for _ in header]]
-
-    return table
-
-def getEndpointsTable():
-    endpoints = get_endpoints()
-    header = [ "ID", "IP", "ACCESSIBLE"]
-    keys = ["id", "ip", "accessible"]
-    return makeTable(endpoints, header, keys)
-
 bp = Blueprint('home', __name__, url_prefix = '/')
 
 @bp.route('/', methods = ('GET',))
 def home():
     notifications_form = NotificationsForm()
-    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable())
+    return render_template('home.html', notifications_form=notifications_form, endpoints_table=get_endpoints_table())
 
 @bp.route('/notifications', methods = ('GET', 'POST'))
 def notifications():
@@ -85,7 +54,7 @@ def notifications():
         else:
             flash(error)
     # https://github.com/hotwired/turbo-rails/issues/12 Turbo requires rendering form responses with 422
-    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable()), 422
+    return render_template('home.html', notifications_form=notifications_form, endpoints_table=get_endpoints_table()), 422
 
 def allowed_file(filename):
         return '.' in filename and \
@@ -118,10 +87,10 @@ def endpoints():
                     # Insert if nothing was wrong
                     insert_endpoints(csv_string)
                     flash('Thank you')
-                    endpoints_table = getEndpointsTable()
+                    endpoints_table = get_endpoints_table()
                     
                     return render_template('home.html', notifications_form=notifications_form, endpoints_table=endpoints_table), 422
 
         flash(error)
 
-    return render_template('home.html', notifications_form=notifications_form, endpoints_table=getEndpointsTable()), 422
+    return render_template('home.html', notifications_form=notifications_form, endpoints_table=get_endpoints_table()), 422
