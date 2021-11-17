@@ -18,6 +18,8 @@ Initial setup steps macOS/Linux:
    You should see "Initialized the database."
 7. Start flask:
     $ flask run --host=0.0.0.0
+8. Start the pinger:
+    $ python3 pinger.py
 
 Initial setup steps Windows:
 1. Open a cmd prompt in the server folder.
@@ -31,7 +33,9 @@ Initial setup steps Windows:
 6. Initialize the database by running: "flask init-db"
    You should see "Initialized the database."
 7. Start flask:
-     > flask run
+    > flask run
+8. Start the pinger:
+    > python3 pinger.py
 
 To re-initialize the db:
 1. Follow steps 1, 3, 5, and 6 of initial setup for your OS
