@@ -1,11 +1,8 @@
 import time
-
 import datetime
-
 from TextAlert import sendText
-
+from webhook import webhook
 from flaskr.db import get_notification_settings
-
 from flaskr.DB_Alert import DB_Alert
 
 
@@ -21,13 +18,15 @@ class Alert:
             return '\n\nALERT NAC FAILURE TYPE 2\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was NO ACCESS but the actual result was ACCESS \nError detected at ' + str(time.ctime(t)) + '\n\n'
         else:
             return '\n\nALERT NAC FAILURE TYPE 1\nNAC Checker has detected a failure to IP ' + str(endpoint['ip']) + '\nThe expected result was ACCESS but the actual result was NO ACCESS \nError detected at ' + str(time.ctime(t)) + '\n\n'
-
     
     def actually_send_alerts(self, endpoint, working):
         alert = self.broken[endpoint['id']]
         alert_message = self.get_alert_message_by_failure_type(alert.failure_type, endpoint, alert.start_time, working)
+        notification_settings = get_notification_settings()
+        
         print(alert_message)
-        sendText(get_notification_settings()['phone_number'], alert_message)
+        sendText(notification_settings['phone_number'], alert_message)
+        webhook(notification_settings['webhook_url'], ip=endpoint['ip'], failure_description=alert_message, start_datetime=alert.start_time, end_datetime=alert.end_time)
 
     def send(self, failure_type, endpoint):
         now = time.time()
