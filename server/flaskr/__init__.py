@@ -86,7 +86,7 @@ def inject_tables():
 def update_alerts_table():
     with app.app_context():
         while True:
-            time.sleep(5)
+            time.sleep(1)
             turbo.push(turbo.update(render_template('alertstable.html'), 'alertstable'))
 
 @app.before_first_request
