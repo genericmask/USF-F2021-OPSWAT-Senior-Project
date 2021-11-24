@@ -6,4 +6,5 @@ def webhook(webhook_url, ip, failure_description, start_datetime, end_datetime=N
         "start_datetime": start_datetime,
         "end_datetime": end_datetime}
 
-    requests.post(webhook_url, data=x)
+    if webhook_url != '':
+        requests.post(webhook_url, data=x)
