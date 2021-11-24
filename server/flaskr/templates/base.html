@@ -15,8 +15,8 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
+  {% block flashing %}
+    {% include('_turbo_flashing.html.j2') %}
+  {% endblock %}
   {% block content %}{% endblock %}
 </section>
