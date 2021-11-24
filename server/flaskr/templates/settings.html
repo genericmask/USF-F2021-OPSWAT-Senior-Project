@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Settings{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <h1>Upload Access List .CSV File</h1>
+    <form action="endpoints" method=post enctype=multipart/form-data>
+        <input type = file name = file>
+        <input type = submit value = Upload>
+    </form>
+    <div id="configureNotifications">
+      <h1>Configure Notifications</h1>
+      {% from "_formhelpers.html" import render_field %}
+        <form action="notifications" method=post>
+          <dl>
+            {{ render_field(notifications_form.phone_number) }}
+            {{ render_field(notifications_form.sms_alert_interval) }}
+            {{ render_field(notifications_form.webhook_url) }}
+            {{ render_field(notifications_form.heart_beat_alert_interval) }}
+          </dl>
+          <p><input type=submit value=Submit>
+        </form>
+    </div>
+{% endblock %}
