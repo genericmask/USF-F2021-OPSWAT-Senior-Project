@@ -13,7 +13,7 @@ import phonenumbers
 class NotificationsForm(Form):
     phone_number                = TelField('Phone Number', [validators.DataRequired()])
     sms_alert_interval          = IntegerField('SMS Alert Interval', [validators.InputRequired(), validators.NumberRange(min=1, max=2147483647, message='Minimum allowed is 1')])
-    webhook_url                 = URLField('Webhook URL', [validators.DataRequired()])
+    webhook_url                 = URLField('Webhook URL', [])
     heart_beat_alert_interval   = IntegerField('Heart Beat Alert Interval', [validators.InputRequired(), validators.NumberRange(min=1, max=2147483647, message=(u'Minimum allowed is 1'))])
 
     def validate_phone_number(form, field):
