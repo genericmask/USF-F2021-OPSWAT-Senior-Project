@@ -4,7 +4,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from flaskr.db import insert_notification_settings, insert_endpoints
+from flaskr.db import insert_notification_settings, insert_endpoints, get_notification_settings
 from flaskr.validators.csvEndpointsValidator import csvEndpointsValidator
 
 from wtforms import Form, IntegerField, validators, ValidationError, TelField, URLField
@@ -35,9 +35,19 @@ ALLOWED_EXTENSIONS = {'csv'}
 
 bp = Blueprint('settings', __name__, url_prefix='/settings')
 
+def get_filled_notifications_form():
+    settings = get_notification_settings()
+    print(settings)
+    notifications_form = NotificationsForm()
+    notifications_form.phone_number.data = settings['phone_number']
+    notifications_form.sms_alert_interval.data = settings['sms_alert_interval']
+    notifications_form.webhook_url.data = settings['webhook_url']
+    notifications_form.heart_beat_alert_interval.data = settings['heart_beat_alert_interval']
+    return notifications_form
+
 @bp.route('/', methods = ('GET',))
 def home():
-    notifications_form = NotificationsForm(request.form)
+    notifications_form = get_filled_notifications_form()
     return render_template('settings.html', notifications_form=notifications_form)
 
 @bp.route('/notifications', methods = ('GET', 'POST'))
@@ -45,9 +55,7 @@ def notifications():
     notifications_form = NotificationsForm(request.form)
     print(notifications_form.data)
     if request.method == 'POST' and notifications_form.validate():
-
         error = None
-        form_params = ["phone_number", "sms_alert_interval", "webhook_url", "heart_beat_alert_interval"]
 
         if error is None:
             print(insert_notification_settings(request.form))
@@ -56,7 +64,7 @@ def notifications():
         else:
             flash(error)
 
-    return render_template('settings.html', notifications_form=notifications_form)
+    return render_template('settings.html', notifications_form=notifications_form), 422
 
 def allowed_file(filename):
         return '.' in filename and \
@@ -88,10 +96,10 @@ def endpoints():
                 if error is None:
                     # Insert if nothing was wrong
                     insert_endpoints(csv_string)
-                    flash('Thank you')
+                    flash('Upload Successful')
                     
-                    return render_template('home.html', notifications_form=notifications_form)
+                    return render_template('settings.html', notifications_form=notifications_form), 422
 
         flash(error)
 
-    return render_template('home.html', notifications_form=notifications_form)
+    return render_template('settings.html', notifications_form=notifications_form), 422
