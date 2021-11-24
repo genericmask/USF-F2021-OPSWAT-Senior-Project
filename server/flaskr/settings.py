@@ -1,4 +1,5 @@
 import functools
+from io import TextIOWrapper
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 )
@@ -38,7 +39,6 @@ bp = Blueprint('settings', __name__, url_prefix='/settings')
 
 def get_filled_notifications_form():
     settings = get_notification_settings()
-    print(settings)
     notifications_form = NotificationsForm()
     notifications_form.phone_number.data = settings['phone_number']
     notifications_form.sms_alert_interval.data = settings['sms_alert_interval']
@@ -102,16 +102,17 @@ def endpoints():
                 error = 'Invalid file extension.'
 
             if error is None:
-                # Should be safe to read and decode file.
-                csv_string = file.read().decode("utf-8")
-
                 # Check for file content validity
-                error = csvEndpointsValidator(csv_string)
+                csvfile = TextIOWrapper(file, encoding="utf-8")
+                error = csvEndpointsValidator(csvfile)
 
                 if error is None:
                     # Insert if nothing was wrong
-                    insert_endpoints(csv_string)
+                    insert_endpoints(csvfile)
+                    csvfile.close()
                     return turbo_flash("Upload Successful")
+                    
+                csvfile.close()
 
         return turbo_flash(error)
 

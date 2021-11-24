@@ -4,6 +4,7 @@ from wificheck import check_network
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+import csv
 
 DEFAULT_NOTIFICATION_SETTINGS = {
     'phone_number' : '',
@@ -107,14 +108,16 @@ def insert_notification_settings(settings):
     
     return True
 
-# @param=csv : a string containing the contents of a csv file where the first line is the column names and rows are ended with '\r\n'
-def insert_endpoints(csv):
+# @param=csvfile : a TextIOWrapper stream containing the contents of a validated endpoints csv file
+def insert_endpoints(csvfile):
+    csvfile.seek(0)
     network_id = get_network_id()
 
     insert_into_db("DELETE FROM endpoints WHERE network_id = ?", (network_id,))
+    reader = csv.reader(csvfile)
+    csv_arr = [row for row in reader]
 
-    csv_arr = [x.split(",") for x in csv.split("\r\n")]
-
+    #print(csv_arr)
     if len(csv_arr) > 0:
         csv_arr.pop(0)
         #print(csv_arr)

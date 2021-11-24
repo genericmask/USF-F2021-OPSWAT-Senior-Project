@@ -1,25 +1,21 @@
-CSV_DELIMITER = ","
-CSV_END_OF_LINE = "\r\n"
+import csv
+
 CSV_MINIMUM_ROW_COUNT = 2
 CSV_MAXIMUM_ROW_COUNT = 25
 IP_ERROR_BASE_MESSAGE = "Expected a set of four numbers separated by '.' where each number in the set can range from 0 to 255. \nInvalid IP address: "
 
-# @param=csvString : Expects a string of a csv file and checks if it has two rows: "Endpoint IP" and "Accessible"
+# @param=csv : A TextIOWrapper stream that contains a csv file. 
+# Checks if csv has two columns: "Endpoint IP" and "Accessible"
 # Also checks that all "accessible" values are bool and endpoint IPs are valid
-# @return : None if the csvString is valid or if invalid, a string containing the error
-def csvEndpointsValidator(csv : str):
-
-    if len(csv) < 1:
-        return "File is empty."
-    if csv.count(CSV_DELIMITER) < 1:
-        return "Expected delimiter ('" + CSV_DELIMITER + "') was not found."
-    if csv.count(CSV_END_OF_LINE) < 1:
-        return "Expected more than one line."
-    
-    csv_arr = [x.split(CSV_DELIMITER) for x in csv.split(CSV_END_OF_LINE)]
+# @return : None if the csv is valid. If invalid, a string containing the error
+def csvEndpointsValidator(csvfile):
+    reader = csv.reader(csvfile)
+    csv_arr = [row for row in reader]
 
     if len(csv_arr) < 1:
-        return "Could not read csv file."
+        return "File is empty."
+    if len(csv_arr) < 2:
+        return "Expected more than one line."
     if len(csv_arr) < CSV_MINIMUM_ROW_COUNT + 1: # +1 for the column names
         return "File contains " + str(len(csv_arr)) + "rows. Minimum accepted rows: " + " " + str(CSV_MINIMUM_ROW_COUNT)
     if len(csv_arr) > CSV_MAXIMUM_ROW_COUNT + 1:
