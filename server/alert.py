@@ -1,10 +1,8 @@
 import time
-import datetime
 from TextAlert import sendText
 from webhook import webhook
 from flaskr.db import get_notification_settings
 from flaskr.DB_Alert import DB_Alert
-
 
 class Alert:
     def __init__(self):
@@ -49,4 +47,3 @@ class Alert:
                 self.broken[endpoint['id']].save() # Save the updated alert to the db before we delete it from memory
                 self.actually_send_alerts(endpoint, True)
                 del self.broken[endpoint['id']]
-
