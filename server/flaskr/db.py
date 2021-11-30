@@ -2,7 +2,7 @@ import sqlite3
 from contextlib import closing
 from wificheck import check_network
 import click
-from flask import current_app, g
+from flask import current_app
 from flask.cli import with_appcontext
 import csv
 

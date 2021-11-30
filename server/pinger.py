@@ -1,6 +1,4 @@
-import platform    # For getting the operating system name
-import os, subprocess  # For executing a shell command
-import datetime
+import subprocess
 import sys
 from alert import *
 from wificheck import check_network

@@ -1,7 +1,6 @@
-import functools
 from io import TextIOWrapper
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
+    Blueprint, render_template, request,
 )
 from flaskr.turbo_flash import turbo_flash
 from flaskr.db import insert_notification_settings, insert_endpoints, get_notification_settings
