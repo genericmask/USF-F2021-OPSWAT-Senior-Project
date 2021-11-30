@@ -35,7 +35,6 @@ def main():
     except KeyboardInterrupt:
         print('\ninterrupted!\n')
 
-
 class Pinger:
 
     def __init__(self, pingMaxTime=100):       
@@ -68,9 +67,8 @@ class Pinger:
             self.alert.send(failure_type='Type 2', endpoint=endpoint)
             return False
             
-
         elif (not pingResp) and endpoint['accessible']:
-            self.alert.send(failure_type='Type 2', endpoint=endpoint)
+            self.alert.send(failure_type='Type 1', endpoint=endpoint)
             return False
 
         else:
@@ -83,7 +81,6 @@ class Pinger:
         '''
         for ep in self.endpoints:
             self.check_endpoint(ep)
-
 
 if __name__ == '__main__':
     main()
