@@ -14,8 +14,14 @@
     </div>
     <div id="documentation">
       <h1>Documentation</h1>
+      <h3>Error Types</h3>
+      <span>Type 1 Error: NAC checker device LOSES ACCESS to an endpoint that it SHOULD be able to ACCESS.</span>
+      <br><br>
+      <span>Type 2 Error: NAC checker device GAINS ACCESS to an endpoint that it SHOULD NOT be able to ACCESS.</span>
+        
       <h3>Webhook</h3>
-      <span>POST Payload: JSON</span><br>
+      <span>POST Payload: JSON</span>
+      <br>
       <span>Format: { ip: String, failure_description: String, start_datetime: datetime, end_datetime: datetime || null }</span>
     </div>
     
