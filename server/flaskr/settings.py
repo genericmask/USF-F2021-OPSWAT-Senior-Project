@@ -12,9 +12,9 @@ import phonenumbers
 
 class NotificationsForm(Form):
     phone_number                = TelField('Phone Number', [])
-    sms_alert_interval          = IntegerField('SMS Alert Interval', [validators.InputRequired(), validators.NumberRange(min=1, max=2147483647, message='Minimum allowed is 1')])
+    sms_alert_interval          = IntegerField('SMS Alert Interval (mins)', [validators.InputRequired(), validators.NumberRange(min=1, max=2147483647, message='Minimum allowed is 1')])
     webhook_url                 = URLField('Webhook URL', [])
-    heart_beat_alert_interval   = IntegerField('Heart Beat Alert Interval', [validators.InputRequired(), validators.NumberRange(min=1, max=2147483647, message=(u'Minimum allowed is 1'))])
+    heart_beat_alert_interval   = IntegerField('Heart Beat Alert Interval (mins)', [validators.InputRequired(), validators.NumberRange(min=1, max=2147483647, message=(u'Minimum allowed is 1'))])
 
     def validate_phone_number(form, field):
         if len(field.data) == 0:
@@ -80,7 +80,6 @@ def notifications():
     
     return replace_notifications_form_and_flash(notifications_form, message)
         
-
 def allowed_file(filename):
         return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
