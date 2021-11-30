@@ -9,13 +9,10 @@ from TextAlert import sendText
 
 # Constants
 MAX_TIME = 100 # ms
-#HEARTBEAT_DELAY = 900
 DELAY = 5 # sec
 
 def main():
     start_time = time.time()
-    #elapsed_time = time.time() - start_time
-    #print(elapsed_time)
     
     pinger = Pinger(pingMaxTime=MAX_TIME)
     
@@ -31,7 +28,6 @@ def main():
                start_time = time.time() # reset time
 
             #Get endpoints perform pings every 10 seconds unless a keyboard interrupt occurs
-            #if (csv file change)
             pinger.endpoints= get_endpoints()
             pinger.run_checker()
 
@@ -60,9 +56,8 @@ class Pinger:
         elif sys.platform.startswith('darwin'):
             response = subprocess.call(['ping', '-c', '1', '-W', '100', ip]) #MacOS
 
-        #Just don't run on windows lol
+        # Just don't run on windows lol
         
-        # Return response
         return response == 0
         
     def check_endpoint(self, endpoint):
@@ -72,18 +67,13 @@ class Pinger:
         pingResp = self.ping(endpoint['ip'])
         
         if pingResp and (not endpoint['accessible']):
-            #pingtest = self.ping(endpoint['ip'])
-            #if pingtest and (not endpoint['accessible']):
-                self.alert.send(failure_type='Type 2', endpoint=endpoint)
-                return False
-            #return True 
+            self.alert.send(failure_type='Type 2', endpoint=endpoint)
+            return False
+            
 
         elif (not pingResp) and endpoint['accessible']:
-            #pingtest = self.ping(endpoint['ip'])
-            #if (not pingtest) and (endpoint['accessible']):
-                self.alert.send(failure_type='Type 2', endpoint=endpoint)
-                return False
-            #return True
+            self.alert.send(failure_type='Type 2', endpoint=endpoint)
+            return False
 
         else:
             self.alert.send(failure_type=None, endpoint=endpoint)
@@ -94,7 +84,7 @@ class Pinger:
             Checks each endpoint is working, otherwise sends alert
         '''
         for ep in self.endpoints:
-                self.check_endpoint(ep)
+            self.check_endpoint(ep)
 
 
 if __name__ == '__main__':
