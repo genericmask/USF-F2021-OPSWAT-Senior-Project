@@ -1,3 +1,5 @@
+endpointsIP.csv contains a sample CSV endpoints list which would be uploaded to the NAC checker.
+
 File Structure:
 The folder "server" contains all the files needed to run the NAC checker software.
 In "server" is the folder "flaskr" which contains the Flask app and its associated files.
