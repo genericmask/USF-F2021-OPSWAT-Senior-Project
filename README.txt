@@ -1,9 +1,12 @@
-Works with Python 3.9.5 and (possibly?) 3.7.x
+File Structure:
+The folder "server" contains all the files needed to run the NAC checker software.
+In "server" is the folder "flaskr" which contains the Flask app and its associated files.
+In "flaskr" are the folders:
+* "static" which contains css for the webpage.
+* "templates" which contains the HTML templates the Flask app uses to build the webpage.
+* "validators" which contains a Python module used for user input validation.
 
-This was made following (some of) the Flask tutorial: https://flask.palletsprojects.com/en/2.0.x/tutorial/
-
-Setup steps from https://flask.palletsprojects.com/en/2.0.x/installation/
-and https://flask.palletsprojects.com/en/2.0.x/quickstart/
+Works with Python 3.X.X >= 3.7
 
 Initial setup steps macOS/Linux:
 1. Open a terminal in the server folder.
