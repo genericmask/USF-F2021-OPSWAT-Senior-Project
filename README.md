@@ -1,10 +1,18 @@
+NAC Efficacy Tester to Validate Network Accuracy for OPSWAT
+
+Computer Science and Engineering Senior Project - Fall 2021
+
+University of South Florida
+
 # Contributors
-Names                   | Emails                | GitHubs
-Casey Feikema           | cfeikema@usf.edu      | casey-feikema
-Mateus A. Fernandes A.  | mateusf1@usf.edu      | mateusf1
-Chance Cornell          | ccornell2@usf.edu     | CCornell10
-Spencer McClanahan      | smcclabahan@usf.edu   | SJMcClanahan
-Siddhant Raman          | sraman@usf.edu        | sranab0302
+
+| Contributors              | Emails                | GitHubs                    |
+| :---                      | :---                  | :---                       |
+| Casey Feikema             | cfeikema@usf.edu      | casey-feikema, genericmask |
+| Mateus A. Fernandes A.    | mateusf1@usf.edu      | mateusf1                   |
+| Chance Cornell            | ccornell2@usf.edu     | CCornell10                 |
+| Spencer McClanahan        | smcclabahan@usf.edu   | SJMcClanahan               |
+| Siddhant Raman            | sraman@usf.edu        | sranab0302                 |
 
 # File Structure:
 "endpointsIP.csv" contains a sample CSV endpoints list which would be uploaded to the NAC checker.
@@ -21,30 +29,42 @@ Works with Python 3.X.X >= 3.7
 # Setup 
 ## Initial steps for macOS/Linux:
 1. Open a terminal in the server folder.
-2. Create a venv folder with "python3 -m venv venv"
-3. Activate the environment with ". venv/bin/activate". Your shell prompt wil change to
-    show the name of the activated environment.
-4. Install dependencies with "pip install Flask twilio WTForms phonenumbers turbo_flask"
-5. Initialize environment variables: 
-    $ export FLASK_APP=flaskr
-    $ export FLASK_ENV=development
-6. Initialize the database by running: "flask init-db"
+2. Create a venv folder with 
+    > python3 -m venv venv
+4. Activate the environment with:
+    > . venv/bin/activate
+   
+   Your shell prompt wil change to show the name of the activated environment.
+5. Install dependencies with 
+    > pip install Flask twilio WTForms phonenumbers turbo_flask
+6. Initialize environment variables: 
+    > export FLASK_APP=flaskr
+    > export FLASK_ENV=development
+6. Initialize the database by running:
+    > flask init-db
+   
    You should see "Initialized the database."
 7. Start flask:
-    $ flask run --host=0.0.0.0
+    > flask run --host=0.0.0.0
 8. Start the pinger:
-    $ python3 pinger.py
+    > python3 pinger.py
 
 ## Initial steps for Windows:
 1. Open a cmd prompt in the server folder.
-2. Create a venv folder with "py -3 -m venv venv"
-3. Active the environment with "venv\Scripts\activate". Your shell prompt wil change to
-    show the name of the activated environment.
-4. Install dependencies with "pip install Flask twilio WTForms phonenumbers turbo_flask"
+2. Create a venv folder with 
+    > py -3 -m venv venv
+3. Active the environment with:
+    > venv\Scripts\activate
+   
+   Your shell prompt wil change to show the name of the activated environment.
+4. Install dependencies with
+    > pip install Flask twilio WTForms phonenumbers turbo_flask
 5. Initialize environment variables: 
     > set FLASK_APP=flaskr
     > set FLASK_ENV=development
-6. Initialize the database by running: "flask init-db"
+6. Initialize the database by running:
+    > flask init-db
+   
    You should see "Initialized the database."
 7. Start flask:
     > flask run
